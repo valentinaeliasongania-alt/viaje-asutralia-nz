@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Australia & NZ 2026–2027</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--au:#D85A30;--nz:#1D9E75;--bg:#F8F6F1;--card:#fff;--text:#1a1a18;--muted:#888780;--border:#E8E5DE;--sbg:#EAF3DE;--stxt:#27500A;--wbg:#FAEEDA;--wtxt:#633806;--ibg:#E6F1FB;--itxt:#0C447C}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
+.hdr{background:var(--text);color:#fff;padding:32px 24px 24px;position:relative;overflow:hidden}
+.hdr::before{content:'';position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);pointer-events:none}
+.hdr h1{font-family:'Playfair Display',serif;font-size:28px;font-weight:400;line-height:1.15;margin:0 0 4px;position:relative}
+.hdr h1 em{font-style:italic;color:#EF9F27}
+.sub{font-size:13px;opacity:0.45;margin:0 0 22px}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;position:relative}
+.stat .n{font-size:19px;font-weight:500}
+.stat .l{font-size:10px;opacity:0.4;margin-top:2px;text-transform:uppercase;letter-spacing:0.07em}
+.prog-wrap{margin-top:18px}
+.prog-bar{height:3px;background:rgba(255,255,255,0.12);border-radius:2px;overflow:hidden;margin-bottom:5px}
+.prog-fill{height:100%;background:var(--nz);border-radius:2px;transition:width 0.4s}
+.prog-lbl{font-size:11px;opacity:0.4;text-align:right}
+.saved-ind{font-size:11px;color:#EF9F27;position:absolute;top:24px;right:16px;opacity:0;transition:opacity 0.3s}
+.saved-ind.show{opacity:1}
+.tabs{display:flex;border-bottom:1px solid var(--border);background:var(--card);overflow-x:auto}
+.tab{font-size:13px;font-weight:500;padding:13px 18px;cursor:pointer;border-bottom:2px solid transparent;color:var(--muted);transition:all 0.15s;white-space:nowrap;-webkit-tap-highlight-color:transparent}
+.tab:hover{color:var(--text)}
+.tab.on{color:var(--text);border-bottom-color:var(--text)}
+.body{padding:20px 16px;max-width:780px;margin:0 auto}
+.sec{display:none}.sec.on{display:block}
+.legend{display:flex;gap:16px;margin-bottom:20px}
+.leg{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--muted)}
+.ldot{width:9px;height:9px;border-radius:50%}
+.tl-row{display:flex;gap:14px;margin-bottom:5px}
+.tl-L{display:flex;flex-direction:column;align-items:center;width:20px;flex-shrink:0;padding-top:16px}
+.nd{width:11px;height:11px;border-radius:50%}
+.nd.au{background:var(--au);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--au)}
+.nd.nz{background:var(--nz);box-shadow:0 0 0 2px var(--bg),0 0 0 3px var(--nz)}
+.nd.tr{width:7px;height:7px;background:var(--muted);opacity:0.35;margin-top:2px}
+.tl-line{width:1px;flex:1;background:var(--border);min-height:6px;margin-top:4px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;overflow:hidden;flex:1}
+.card-tr{background:transparent;border:1px dashed var(--border);border-radius:8px;padding:9px 14px;flex:1;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;line-height:1.4}
+.ch{display:flex;align-items:center;gap:10px;padding:14px 16px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.ch:active{background:#fafaf8}
+.cf{font-size:18px;flex-shrink:0}
+.cm{flex:1;min-width:0}
+.ct{font-family:'Playfair Display',serif;font-size:17px;font-weight:400;margin:0 0 1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd{font-size:12px;color:var(--muted);margin:0}
+.cn{font-size:11px;font-weight:500;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.cn.au{background:#FAECE7;color:#712B13}
+.cn.nz{background:#E1F5EE;color:#085041}
+.chev{color:var(--muted);font-size:18px;transition:transform 0.2s;flex-shrink:0}
+.chev.open{transform:rotate(180deg)}
+.cb{border-top:1px solid var(--border);padding:14px 16px;display:none}
+.cb.open{display:block}
+.albl{font-size:10px;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);font-weight:500;margin-bottom:8px}
+.alist{list-style:none;display:flex;flex-direction:column;gap:6px;margin-bottom:12px}
+.alist li{font-size:13px;color:#444;display:flex;gap:7px;line-height:1.4}
+.alist li::before{content:"–";flex-shrink:0;color:var(--muted)}
+.note{font-size:12px;padding:9px 12px;border-radius:8px;line-height:1.5}
+.note.g{background:var(--sbg);color:var(--stxt)}
+.note.a{background:var(--wbg);color:var(--wtxt)}
+.note.b{background:var(--ibg);color:var(--itxt)}
+.rsec{margin-bottom:24px}
+.rsec-t{font-size:11px;text-transform:uppercase;letter-spacing:0.07em;font-weight:500;color:var(--muted);margin-bottom:8px}
+.ri{display:flex;align-items:flex-start;gap:10px;padding:12px 13px;background:var(--card);border:1px solid var(--border);border-radius:9px;margin-bottom:6px}
+.ri.done{opacity:0.45}
+.ri.done .rit{text-decoration:line-through;color:var(--muted)}
+.rck{width:20px;height:20px;border-radius:5px;border:1.5px solid var(--border);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.15s;font-size:13px;color:transparent;-webkit-tap-highlight-color:transparent}
+.ri.done .rck{background:var(--nz);border-color:var(--nz);color:#fff}
+.rib{flex:1;min-width:0}
+.rit{font-size:13px;font-weight:500;margin-bottom:2px}
+.ris{font-size:12px;color:var(--muted);line-height:1.4}
+.rbdg{font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;margin-left:5px;vertical-align:middle}
+.rbdg.ok{background:var(--sbg);color:var(--stxt)}
+.rbdg.w{background:var(--wbg);color:var(--wtxt)}
+.rbdg.i{background:var(--ibg);color:var(--itxt)}
+.rbdg.o{background:#F1EFE8;color:#5F5E5A}
+.det-btn{font-size:12px;color:var(--itxt);background:none;border:none;padding:5px 0 0;cursor:pointer;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent}
+.det-panel{display:none;margin-top:10px;padding:12px;background:var(--bg);border-radius:8px;border:1px solid var(--border)}
+.det-panel.open{display:block}
+.det-panel label{font-size:11px;color:var(--muted);display:block;margin-bottom:3px;margin-top:10px}
+.det-panel label:first-child{margin-top:0}
+.det-panel input{width:100%;font-size:13px;padding:8px 10px;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--text);font-family:'DM Sans',sans-serif;outline:none}
+.det-panel input:focus{border-color:var(--muted)}
+.det-save{margin-top:10px;padding:7px 16px;background:var(--text);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.det-disp{margin-top:8px;font-size:12px;color:var(--muted);line-height:1.7;background:var(--bg);padding:8px 10px;border-radius:7px;border:1px solid var(--border);display:none}
+.det-disp b{color:var(--text)}
+.ntbox{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:18px;margin-bottom:12px}
+.ntbox h3{font-family:'Playfair Display',serif;font-size:15px;font-weight:400;margin:0 0 6px}
+.ntbox p{font-size:13px;color:var(--muted);line-height:1.6}
+.ntbox textarea{width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:10px;font-family:'DM Sans',sans-serif;font-size:13px;background:var(--bg);color:var(--text);resize:vertical;outline:none;margin-top:10px}
+.nt-saved{margin-top:8px;font-size:13px;color:var(--text);line-height:1.6;white-space:pre-wrap;padding:10px;background:var(--bg);border-radius:8px;border:1px solid var(--border);display:none}
+.btn-green{padding:7px 16px;background:var(--nz);color:#fff;border:none;border-radius:7px;font-size:13px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:8px}
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px}
+.err-banner{background:#FCEBEB;color:#791F1F;font-size:12px;padding:8px 12px;border-radius:7px;margin-bottom:12px;display:none}
+@media(max-width:480px){
+  .hdr{padding:24px 16px 20px}
+  .hdr h1{font-size:23px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .body{padding:14px 12px}
+}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <span class="saved-ind" id="si">✓ Guardado</span>
+  <h1>Australia &amp; <em>Nueva Zelanda</em></h1>
+  <p class="sub">Valen &amp; Pepo &nbsp;·&nbsp; 31 dic 2026 → 29 ene 2027</p>
+  <div class="stats">
+    <div class="stat"><div class="n">29</div><div class="l">Noches</div></div>
+    <div class="stat"><div class="n">7</div><div class="l">Destinos</div></div>
+    <div class="stat"><div class="n">23 ene</div><div class="l">Open</div></div>
+    <div class="stat"><div class="n">11:10</div><div class="l">Vuelta SYD</div></div>
+  </div>
+  <div class="prog-wrap">
+    <div class="prog-bar"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+    <div class="prog-lbl" id="pl">Cargando...</div>
+  </div>
+</div>
+
+<div class="tabs">
+  <div class="tab on" onclick="showTab('itin',this)">Itinerario</div>
+  <div class="tab" onclick="showTab('res',this)">Reservas</div>
+  <div class="tab" onclick="showTab('notas',this)">Notas</div>
+</div>
+
+<div class="body">
+<div class="err-banner" id="err">Sin conexión — los cambios se guardan localmente.</div>
+
+<!-- ITINERARIO -->
+<div class="sec on" id="sec-itin">
+  <div class="legend">
+    <div class="leg"><div class="ldot" style="background:var(--au)"></div>Australia</div>
+    <div class="leg"><div class="ldot" style="background:var(--nz)"></div>Nueva Zelanda</div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">✈️ &nbsp;<b>BUE → SYD</b> &nbsp;·&nbsp; 29 dic 2026, 21:05 AEP &nbsp;·&nbsp; LA424+LA809 vía SCL &nbsp;·&nbsp; Llega 31 dic 07:20</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd au"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇦🇺</span><div class="cm"><p class="ct">Sydney + Jervis Bay</p><p class="cd">31 dic – 8 ene &nbsp;·&nbsp; The Rocks / Circular Quay</p></div><span class="cn au">8 noches</span><span class="chev open">▾</span></div>
+      <div class="cb open"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>Año Nuevo — fuegos artificiales Opera House (31 dic)</li>
+          <li>Kayak con vistas a la Opera House</li>
+          <li>Bondi Beach + Bondi to Coogee walk</li>
+          <li>Palm Beach (excursión de día)</li>
+          <li>Blue Mountains National Park (excursión de día)</li>
+          <li>Manly en ferry desde Circular Quay</li>
+          <li>Jervis Bay — Hyams Beach + delfines (~5 ene, 1 noche en Huskisson)</li>
+        </ul>
+        <div class="note g">Llegás el 31/12 a las 7:20hs. Descanso y a la noche, Año Nuevo en el puerto.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">✈️ &nbsp;<b>SYD → ZQN</b> &nbsp;·&nbsp; 8 ene 2027</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd nz"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇳🇿</span><div class="cm"><p class="ct">Queenstown</p><p class="cd">8 – 13 ene &nbsp;·&nbsp; Centro / lago Wakatipu</p></div><span class="cn nz">5 noches</span><span class="chev">▾</span></div>
+      <div class="cb"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>Nevis Swing — AJ Hackett (reservar con anticipación)</li>
+          <li>Milford Sound — excursión de día completo con bus + crucero</li>
+          <li>Explorar Queenstown — lago Wakatipu, Skyline Gondola, Arrowtown</li>
+        </ul>
+        <div class="note a">El 13 ene, camino a Wanaka: parada opcional en Kawarau Bridge Bungy (~1hs en ruta).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">🚗 &nbsp;<b>Queenstown → Wanaka</b> &nbsp;·&nbsp; 13 ene &nbsp;·&nbsp; ~1hs (parada opcional Kawarau Bungy)</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd nz"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇳🇿</span><div class="cm"><p class="ct">Wanaka</p><p class="cd">13 – 16 ene &nbsp;·&nbsp; Orilla del lago</p></div><span class="cn nz">3 noches</span><span class="chev">▾</span></div>
+      <div class="cb"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>Paracaídas — vistas al lago y los Alpes del Sur (14 o 15 ene)</li>
+          <li>Wanaka Tree — el árbol más fotografiado de NZ</li>
+          <li>Roy's Peak — caminata con panorámica al lago</li>
+          <li>Pueblo — cafés, orilla del lago, descanso</li>
+        </ul>
+        <div class="note a">El paracaídas solo puede hacerse el 14 o 15. No el día de llegada (13) ni el de salida en auto (16).</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">🚗 &nbsp;<b>Wanaka → Lake Tekapo</b> &nbsp;·&nbsp; 16 ene &nbsp;·&nbsp; ~2hs</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd nz"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇳🇿</span><div class="cm"><p class="ct">Lake Tekapo &amp; Mount Cook</p><p class="cd">16 – 19 ene &nbsp;·&nbsp; Pueblo con vista al lago</p></div><span class="cn nz">3 noches</span><span class="chev">▾</span></div>
+      <div class="cb"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>Stargazing — tour nocturno Dark Sky Project, Observatorio Mt. John</li>
+          <li>Excursión a Mount Cook (Aoraki)</li>
+          <li>Church of the Good Shepherd</li>
+          <li>Lago Tekapo — aguas turquesas únicas</li>
+        </ul>
+        <div class="note b">19 ene: auto Tekapo → Christchurch (~2.5hs) + devolver auto + vuelo CHC → AKL. Reservar vuelo mediodía o tarde.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">🚗✈️ &nbsp;<b>Tekapo → Christchurch (devolver auto) → Auckland</b> &nbsp;·&nbsp; 19 ene &nbsp;·&nbsp; CHC → AKL mediodía/tarde</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd nz"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇳🇿</span><div class="cm"><p class="ct">Auckland</p><p class="cd">19 – 22 ene &nbsp;·&nbsp; CBD / Viaduct Harbour</p></div><span class="cn nz">3 noches</span><span class="chev">▾</span></div>
+      <div class="cb"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>Tongariro Alpine Crossing — 19km sobre volcanes activos, día completo</li>
+          <li>KJet — jet boat (coordinar traslado desde base)</li>
+          <li>Explorar Auckland — Viaduct, Sky Tower, mercados</li>
+          <li>Foo Fighters — Western Springs Stadium, 22 ene 7pm (a confirmar según vuelo)</li>
+        </ul>
+        <div class="note a">No pongas el Tongariro el día antes ni el día después del KJet. Ej: día 1 KJet, día 2 ciudad, día 3 Tongariro.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">✈️ &nbsp;<b>AKL → MEL</b> &nbsp;·&nbsp; 22 ene &nbsp;·&nbsp; llegar con tiempo para el Open el 23</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd au"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇦🇺</span><div class="cm"><p class="ct">Melbourne</p><p class="cd">22 – 27 ene &nbsp;·&nbsp; Richmond (cerca Melbourne Park)</p></div><span class="cn au">5 noches</span><span class="chev">▾</span></div>
+      <div class="cb"><div class="albl">Actividades</div>
+        <ul class="alist">
+          <li>🎾 Australian Open — 23 ene, tercera ronda · Ground Pass + Rod Laver Arena Night Session</li>
+          <li>Great Ocean Road — día completo en auto</li>
+          <li>Clases de surf</li>
+          <li>Melbourne ciudad — laneways, Queen Victoria Market, cafés</li>
+        </ul>
+        <div class="note g">Con 5 noches Melbourne queda cómoda para distribuir todo sin apuros.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div><div class="tl-line"></div></div><div class="card-tr">✈️ &nbsp;<b>MEL → SYD</b> &nbsp;·&nbsp; 27 ene</div></div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd au"></div><div class="tl-line"></div></div>
+    <div class="card">
+      <div class="ch" onclick="tog(this)"><span class="cf">🇦🇺</span><div class="cm"><p class="ct">Sydney — cierre</p><p class="cd">27 – 28 ene &nbsp;·&nbsp; 1 noche libre</p></div><span class="cn au">1 noche</span><span class="chev">▾</span></div>
+      <div class="cb">
+        <ul class="alist">
+          <li>Día libre — shopping, paseo o descanso</li>
+          <li>Vuelo de vuelta: 29 ene 11:10 SYD · LA810+LA425 vía SCL · llega 19:40 AEP</li>
+        </ul>
+        <div class="note g">Llegás el 27 a la noche. El 28 es tuyo para cerrar sin apuros.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tl-row"><div class="tl-L"><div class="nd tr"></div></div><div class="card-tr">✈️ &nbsp;<b>SYD → BUE</b> &nbsp;·&nbsp; 29 ene 2027, 11:10 SYD &nbsp;·&nbsp; LA810+LA425 vía SCL &nbsp;·&nbsp; Llega 19:40 AEP</div></div>
+</div>
+
+<!-- RESERVAS -->
+<div class="sec" id="sec-res">
+  <div class="loading" id="res-load">Cargando...</div>
+  <div id="res-content" style="display:none"></div>
+</div>
+
+<!-- NOTAS -->
+<div class="sec" id="sec-notas">
+  <div class="ntbox">
+    <h3>Pendientes a decidir</h3>
+    <p>Foo Fighters Auckland 22 ene: analizar si el horario del vuelo AKL → MEL permite ir al show (7pm) y llegar bien a Melbourne para el Open el 23.</p>
+  </div>
+  <div class="ntbox">
+    <h3>Notas libres</h3>
+    <div id="nt-disp" class="nt-saved"></div>
+    <textarea id="nt-in" placeholder="Escribí acá lo que quieran recordar..."></textarea>
+    <button class="btn-green" onclick="saveNota()">Guardar nota</button>
+  </div>
+</div>
+
+</div><!-- /body -->
+
+<script>
+const API='https://script.google.com/macros/s/AKfycbzmEh5MZ6pFfThsxF09hu9_uVcocIReviBrpyNXWxj0gmSH83wOBCb1NPOIqKx2jlKF1w/exec';
+const ITEMS=[
+  {id:'v1',sec:'✈️ Vuelos internacionales',t:'Buenos Aires → Sydney',s:'29 dic 2026 · 21:05 AEP · LA424+LA809 vía SCL · Llega 31 dic 07:20 SYD',b:'ok',bl:'Sacado',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador']},
+  {id:'v2',sec:'✈️ Vuelos internacionales',t:'Sydney → Buenos Aires',s:'29 ene 2027 · 11:10 SYD · LA810+LA425 vía SCL · Llega 19:40 AEP',b:'ok',bl:'Sacado',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador']},
+  {id:'v3',sec:'✈️ Vuelos internacionales',t:'Sydney → Queenstown',s:'8 ene 2027 · SYD → ZQN',b:'w',bl:'Sacar',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador','Precio']},
+  {id:'v4',sec:'✈️ Vuelos internacionales',t:'Christchurch → Auckland',s:'19 ene 2027 · CHC → AKL · vuelo mediodía o tarde',b:'w',bl:'Sacar',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador','Precio']},
+  {id:'v5',sec:'✈️ Vuelos internacionales',t:'Auckland → Melbourne',s:'22 ene 2027 · AKL → MEL · llegar con tiempo para el Open el 23',b:'w',bl:'Sacar',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador','Precio']},
+  {id:'v6',sec:'✈️ Vuelos internacionales',t:'Melbourne → Sydney',s:'27 ene 2027 · MEL → SYD',b:'w',bl:'Sacar',f:['Aerolínea','Número de vuelo','Hora salida','Hora llegada','Localizador','Precio']},
+  {id:'a1',sec:'🚗 Autos',t:'Auto Isla Sur NZ',s:'Retiro: Queenstown 8 ene · Devolución: Christchurch 19 ene · one-way',b:'w',bl:'Sacar ya',f:['Empresa','Modelo/categoría','Número de reserva','Precio total','Seguro incluido']},
+  {id:'a2',sec:'🚗 Autos',t:'Auto Melbourne — Great Ocean Road',s:'Alquiler por el día',b:'i',bl:'Evaluar',f:['Empresa','Fecha','Precio']},
+  {id:'h1',sec:'🏨 Hospedajes',t:'Sydney — primera parte',s:'31 dic – ~5 ene · The Rocks / Circular Quay · ~5 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h2',sec:'🏨 Hospedajes',t:'Jervis Bay',s:'~5 ene · Huskisson · 1 noche',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h3',sec:'🏨 Hospedajes',t:'Sydney — vuelta de Jervis Bay',s:'~6 – 8 ene · The Rocks / Circular Quay · 2 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h4',sec:'🏨 Hospedajes',t:'Queenstown',s:'8 – 13 ene · centro · 5 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h5',sec:'🏨 Hospedajes',t:'Wanaka',s:'13 – 16 ene · orilla del lago · 3 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h6',sec:'🏨 Hospedajes',t:'Lake Tekapo',s:'16 – 19 ene · con vista al lago · 3 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h7',sec:'🏨 Hospedajes',t:'Auckland',s:'19 – 22 ene · CBD / Viaduct Harbour · 3 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h8',sec:'🏨 Hospedajes',t:'Melbourne',s:'22 – 27 ene · Richmond (cerca Melbourne Park) · 5 noches',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'h9',sec:'🏨 Hospedajes',t:'Sydney — cierre',s:'27 – 28 ene · 1 noche',b:'w',bl:'Reservar',f:['Hotel','Número de reserva','Check-in','Check-out','Precio por noche']},
+  {id:'act1',sec:'🎟️ Actividades',t:'Australian Open — 23 ene',s:'Tercera ronda · Ground Pass + Rod Laver Arena Night Session',b:'w',bl:'Sacar ya',f:['Tipo de entrada','Número de confirmación','Precio','Sector/butaca']},
+  {id:'act2',sec:'🎟️ Actividades',t:'Nevis Swing — Queenstown, 9–12 ene',s:'AJ Hackett · bungy.co.nz · se llena en temporada alta',b:'w',bl:'Reservar',f:['Fecha confirmada','Número de reserva','Precio','Horario']},
+  {id:'act3',sec:'🎟️ Actividades',t:'Milford Sound — desde Queenstown, 9–12 ene',s:'Bus + crucero todo incluido · día completo',b:'w',bl:'Reservar',f:['Empresa','Fecha confirmada','Número de reserva','Precio','Horario de salida']},
+  {id:'act4',sec:'🎟️ Actividades',t:'Paracaídas — Wanaka, 14 o 15 ene',s:'Solo el 14 o 15 (restricción vuelos día antes/después)',b:'w',bl:'Reservar',f:['Empresa','Fecha confirmada (14 o 15 ene)','Número de reserva','Precio','Horario']},
+  {id:'act5',sec:'🎟️ Actividades',t:'Stargazing Dark Sky Project — Tekapo, 16–19 ene',s:'darksky.org.nz · Observatorio Mt. John · tour nocturno 2hs',b:'w',bl:'Reservar',f:['Fecha confirmada','Número de reserva','Precio','Horario']},
+  {id:'act6',sec:'🎟️ Actividades',t:'Tongariro Alpine Crossing — Auckland, 20–21 ene',s:'Excursión de día con transporte desde Auckland (3hs)',b:'w',bl:'Reservar',f:['Empresa','Fecha confirmada','Número de reserva','Precio','Horario de salida']},
+  {id:'act7',sec:'🎟️ Actividades',t:'Kayak Opera House — Sydney, 1–7 ene',s:'Sydney Harbour Kayaks',b:'w',bl:'Reservar',f:['Fecha confirmada','Número de reserva','Precio','Horario']},
+  {id:'act8',sec:'🎟️ Actividades',t:'Delfines Jervis Bay — ~5 ene',s:'Dolphin Watch Cruises · actividad de mañana · reservar antes de llegar',b:'w',bl:'Reservar',f:['Fecha confirmada','Número de reserva','Precio','Horario']},
+  {id:'act9',sec:'🎟️ Actividades',t:'Clases de surf — Melbourne, 24–26 ene',s:'Surf Coast o St Kilda',b:'i',bl:'Reservar',f:['Empresa','Fecha confirmada','Precio','Horario']},
+  {id:'act10',sec:'🎟️ Actividades',t:'Foo Fighters — Auckland, 22 ene, 7pm',s:'Western Springs Stadium · depende del horario del vuelo AKL → MEL',b:'o',bl:'Opcional',f:['Tipo de entrada','Número de confirmación','Precio','Sector']},
+  {id:'act11',sec:'🎟️ Actividades',t:'Kawarau Bridge Bungy — 13 ene en ruta',s:'AJ Hackett · parada Queenstown → Wanaka · se decide in situ',b:'o',bl:'Opcional',f:['Reserva (si aplica)','Precio']}
+];
+
+let S={done:[],details:{},nota:''};
+let timer=null;
+
+async function load(){
+  try{
+    const r=await fetch(API+'?cb='+Date.now());
+    const t=await r.text();
+    if(t&&t!=='{}')S=JSON.parse(t);
+  }catch(e){
+    const lc=localStorage.getItem('vn_bak');
+    if(lc)S=JSON.parse(lc);
+    document.getElementById('err').style.display='block';
+  }
+  renderRes();renderProg();restoreNota();
+}
+
+function sched(){
+  clearTimeout(timer);
+  timer=setTimeout(push,1500);
+}
+
+async function push(){
+  const j=JSON.stringify(S);
+  localStorage.setItem('vn_bak',j);
+  try{
+    await fetch(API,{method:'POST',body:j});
+    const si=document.getElementById('si');
+    si.classList.add('show');
+    setTimeout(()=>si.classList.remove('show'),2000);
+  }catch(e){document.getElementById('err').style.display='block';}
+}
+
+function renderProg(){
+  const t=ITEMS.length,d=S.done.length,p=Math.round(d/t*100);
+  document.getElementById('pf').style.width=p+'%';
+  document.getElementById('pl').textContent=d+' de '+t+' completados · '+p+'%';
+}
+
+function renderRes(){
+  document.getElementById('res-load').style.display='none';
+  const el=document.getElementById('res-content');
+  el.style.display='block';
+  const secs=[...new Set(ITEMS.map(i=>i.sec))];
+  el.innerHTML=secs.map(sec=>`<div class="rsec"><div class="rsec-t">${sec}</div>${ITEMS.filter(i=>i.sec===sec).map(ri).join('')}</div>`).join('');
+}
+
+function ri(item){
+  const done=S.done.includes(item.id);
+  const det=S.details[item.id]||{};
+  const has=item.f.some(f=>det[f]);
+  const flds=item.f.map(f=>`<label>${f}</label><input type="text" value="${(det[f]||'').replace(/"/g,'&quot;')}" placeholder="—" onchange="upd('${item.id}','${f}',this.value)">`).join('');
+  const disp=item.f.filter(f=>det[f]).map(f=>`<b>${f}:</b> ${det[f]}`).join('<br>');
+  return `<div class="ri${done?' done':''}" id="ri-${item.id}">
+    <div class="rck" onclick="tDone('${item.id}')">${done?'✓':''}</div>
+    <div class="rib">
+      <div class="rit">${item.t} <span class="rbdg ${item.b}">${item.bl}</span></div>
+      <div class="ris">${item.s}</div>
+      <div class="det-disp" id="dd-${item.id}" style="display:${has?'block':'none'}">${disp}</div>
+      <button class="det-btn" onclick="tDet('${item.id}')">✏️ <span id="dbl-${item.id}">${has?'Editar detalles':'Agregar detalles'}</span></button>
+      <div class="det-panel" id="dp-${item.id}">${flds}<button class="det-save" onclick="saveDet('${item.id}')">Guardar</button></div>
+    </div>
+  </div>`;
+}
+
+function tDone(id){
+  const i=S.done.indexOf(id);
+  if(i>=0)S.done.splice(i,1);else S.done.push(id);
+  sched();renderRes();renderProg();
+}
+
+function tDet(id){
+  const p=document.getElementById('dp-'+id);
+  const open=p.classList.toggle('open');
+  const det=S.details[id]||{};
+  const has=ITEMS.find(i=>i.id===id).f.some(f=>det[f]);
+  document.getElementById('dbl-'+id).textContent=open?'Cerrar':(has?'Editar detalles':'Agregar detalles');
+}
+
+function upd(id,f,v){
+  if(!S.details[id])S.details[id]={};
+  S.details[id][f]=v;
+}
+
+function saveDet(id){
+  sched();
+  const det=S.details[id]||{};
+  const item=ITEMS.find(i=>i.id===id);
+  const disp=item.f.filter(f=>det[f]).map(f=>`<b>${f}:</b> ${det[f]}`).join('<br>');
+  const dd=document.getElementById('dd-'+id);
+  dd.innerHTML=disp;dd.style.display=disp?'block':'none';
+  document.getElementById('dp-'+id).classList.remove('open');
+  document.getElementById('dbl-'+id).textContent=disp?'Editar detalles':'Agregar detalles';
+}
+
+function restoreNota(){
+  if(S.nota){const d=document.getElementById('nt-disp');d.textContent=S.nota;d.style.display='block';}
+}
+
+function saveNota(){
+  const v=document.getElementById('nt-in').value.trim();
+  if(!v)return;
+  S.nota=(S.nota?S.nota+'\n\n':'')+v;
+  sched();
+  const d=document.getElementById('nt-disp');d.textContent=S.nota;d.style.display='block';
+  document.getElementById('nt-in').value='';
+}
+
+function tog(h){
+  const b=h.nextElementSibling,ch=h.querySelector('.chev');
+  const o=b.classList.toggle('open');
+  if(ch)ch.classList.toggle('open',o);
+}
+
+function showTab(id,el){
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.getElementById('sec-'+id).classList.add('on');
+  el.classList.add('on');
+}
+
+load();
+</script>
+</body>
+</html>
